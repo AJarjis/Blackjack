@@ -260,7 +260,7 @@ public class Hand implements Serializable, Iterable<Card> {
         //TODO: Sort Descending using Card compareTo
         Comparator descending = new Card.CompareAscending();
         handCards.sort(descending);
-        
+
         Collections.reverse(handCards);
     }
 
@@ -366,24 +366,18 @@ public class Hand implements Serializable, Iterable<Card> {
         Hand arrayHand = new Hand(cardArray);
         Hand handHand = new Hand(arrayHand);
 
-        System.out.println("Default Constructed Hand:\n"
-                + defaultHand.toString());
-        System.out.println("Array Constructed Hand:\n"
-                + arrayHand.toString());
-        System.out.println("Hand Constructed Hand:\n"
-                + handHand.toString());
+        System.out.println("Default Constructed Hand:\n" + defaultHand);
+        System.out.println("Array Constructed Hand:\n" + arrayHand);
+        System.out.println("Hand Constructed Hand:\n" + handHand);
 
         /* Testing for add methods */
         defaultHand.add(arrayHand);         // Add hand
         arrayHand.add(myCard3);             // Add card
         handHand.add(cardArrayList);        // Add collection
 
-        System.out.println("Added Hand to hand:\n"
-                + defaultHand.toString());
-        System.out.println("Added card to hand:\n"
-                + arrayHand.toString());
-        System.out.println("Added collection to hand:\n"
-                + handHand.toString());
+        System.out.println("Added Hand to hand:\n" + defaultHand);
+        System.out.println("Added card to hand:\n" + arrayHand);
+        System.out.println("Added collection to hand:\n" + handHand);
 
         /* Testing for remove methods, prints their return values */
         // Remove card that does not exist in hand
@@ -395,7 +389,7 @@ public class Hand implements Serializable, Iterable<Card> {
 
         System.out.println("Removed single card: " + removeSingle);
         System.out.println("Removed all cards: " + removeHand);
-        System.out.println("Card Removed: " + posCard.toString());
+        System.out.println("Card Removed: " + posCard);
 
         /* Testing for getTotalValue */
         System.out.println("Total Values of Default Hand: "
@@ -406,20 +400,20 @@ public class Hand implements Serializable, Iterable<Card> {
 
         System.out.println("\nIterating through handHand:");
         for (Card c : handHand) {
-            System.out.println(c.toString());
+            System.out.println(c);
         }
 
         /* Testing for sort methods */
         handHand.sortAscending();
-        System.out.println("\nAscending Order:\n" + handHand.toString());
+        System.out.println("\nAscending Order:\n" + handHand);
 
         handHand.sortDescending();
-        System.out.println("Descending Order:\n" + handHand.toString());
+        System.out.println("Descending Order:\n" + handHand);
 
         // Proof that iterator still iterates through original order
         System.out.println("Iterating through handHand:");
         for (Card c : handHand) {
-            System.out.println(c.toString());
+            System.out.println(c);
         }
 
         /* Testing for count methods */
@@ -434,7 +428,7 @@ public class Hand implements Serializable, Iterable<Card> {
 
         /* Testing for reverseHand */
         Hand reversedHand = handHand.reverseHand();
-        System.out.println("\nReversed Hand:\n" + reversedHand.toString());
+        System.out.println("\nReversed Hand:\n" + reversedHand);
 
     }
 }

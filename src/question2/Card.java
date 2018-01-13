@@ -11,11 +11,8 @@
  ***************************************************************************** */
 package question2;
 
-import question1.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  *
@@ -232,77 +229,4 @@ public class Card implements Serializable, Comparable<Card> {
         }
     }
 
-    public static void main(String[] args) {
-        /* 
-            Practice cards for testing, also have the added purpose of
-            testing the card and enum constructors.
-         */
-        Rank myRank1 = Rank.QUEEN;
-        Suit mySuit1 = Suit.CLUBS;
-        Card myCard1 = new Card(myRank1, mySuit1);
-
-        Rank myRank2 = Rank.QUEEN;
-        Suit mySuit2 = Suit.SPADES;
-        Card myCard2 = new Card(myRank2, mySuit2);
-
-        /* Test for suit enums */
-        for (Suit s : Suit.values()) {
-            System.out.println(s);
-        }
-
-        /* Test for rank enums with values */
-        for (Rank r : Rank.values()) {
-            System.out.println(r + "(" + r.getVALUE() + ")");
-        }
-
-        /* Test for retrieving previous rank */
-        System.out.println(myRank1.getPrevious());
-
-        /* Test for comparing two cards */
-        System.out.println(myCard1.compareTo(myCard2));
-
-        /* Test for accessor methods*/
-        System.out.println(myCard1.getRank());
-        System.out.println(myCard1.getSuit());
-
-        /* Test for toString method */
-        System.out.println(myCard1.toString());
-
-        /* Test for sum method */
-        System.out.println(sum(myCard1, myCard2));
-
-        /* Test for isBlackjack method */
-        System.out.println(isBlackjack(myCard1, myCard2));
-
-        /* 
-            The following generates a deck of cards to allow for better 
-            testing of the two comparator classes. 
-         */
-        List<Card> myDeck = new ArrayList<>();
-
-        for (Suit s : Suit.values()) {
-            for (Rank r : Rank.values()) {
-                Card newCard = new Card(r, s);
-
-                myDeck.add(newCard);
-            }
-        }
-
-        /* Test for CompareAscending method */
-        Comparator compAsc = new CompareAscending();
-        myDeck.sort(compAsc);
-
-        for (Card c : myDeck) {
-            System.out.println(c.toString());
-        }
-
-        /* Test for CompareSuit method */
-        Comparator compSuit = new CompareSuit();
-
-        myDeck.sort(compSuit);
-
-        for (Card c : myDeck) {
-            System.out.println(c.toString());
-        }
-    }
 }

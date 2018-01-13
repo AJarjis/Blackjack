@@ -16,7 +16,6 @@ import question2.Card.Rank;
 import question2.Card.Suit;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -62,7 +61,7 @@ public class Hand implements Serializable, Iterable<Card> {
      *
      * @serial
      */
-    private int[] totalValues;
+    private int[] totalValues;  //TODO: consider making this resizable for ease
 
     /**
      * Default constructor, creates an empty hand
@@ -339,100 +338,4 @@ public class Hand implements Serializable, Iterable<Card> {
         return copy;
     }
 
-    public static void main(String[] args) {
-
-        /*  Practice cards for testing */
-        Rank myRank1 = Rank.ACE;
-        Suit mySuit1 = Suit.CLUBS;
-        Card myCard1 = new Card(myRank1, mySuit1);
-
-        Rank myRank2 = Rank.QUEEN;
-        Suit mySuit2 = Suit.SPADES;
-        Card myCard2 = new Card(myRank2, mySuit2);
-
-        Rank myRank3 = Rank.TWO;
-        Suit mySuit3 = Suit.SPADES;
-        Card myCard3 = new Card(myRank3, mySuit3);
-
-        /* Card array and arraylist for adding/removing */
-        Card[] cardArray = {myCard1, myCard2};
-        ArrayList<Card> cardArrayList = new ArrayList<>();
-        cardArrayList.add(myCard3);
-
-        /* Testing for multiple constructors */
-        Hand defaultHand = new Hand();
-        Hand arrayHand = new Hand(cardArray);
-        Hand handHand = new Hand(arrayHand);
-
-        System.out.println("Default Constructed Hand:\n"
-                + defaultHand.toString());
-        System.out.println("Array Constructed Hand:\n"
-                + arrayHand.toString());
-        System.out.println("Hand Constructed Hand:\n"
-                + handHand.toString());
-
-        /* Testing for add methods */
-        defaultHand.add(arrayHand);         // Add hand
-        arrayHand.add(myCard3);             // Add card
-        handHand.add(cardArrayList);        // Add collection
-
-        System.out.println("Added Hand to hand:\n"
-                + defaultHand.toString());
-        System.out.println("Added card to hand:\n"
-                + arrayHand.toString());
-        System.out.println("Added collection to hand:\n"
-                + handHand.toString());
-
-        /* Testing for remove methods, prints their return values */
-        // Remove card that does not exist in hand
-        boolean removeSingle = defaultHand.remove(myCard3);
-        // Remove all cards in hand
-        boolean removeHand = Hand.remove(arrayHand);
-        // Remove card at position in hand
-        Card posCard = handHand.remove(2);
-
-        System.out.println("Removed single card: " + removeSingle);
-        System.out.println("Removed all cards: " + removeHand);
-        System.out.println("Card Removed: " + posCard.toString());
-
-        /* Testing for getTotalValue */
-        System.out.println("Total Values of Default Hand: "
-                + Arrays.toString(defaultHand.getTotalValues()));
-
-        /* Testing for iterator */
-        handHand.add(myCard3);          // Added card to better display sorting
-
-        System.out.println("\nIterating through handHand:");
-        for (Card c : handHand) {
-            System.out.println(c.toString());
-        }
-
-        /* Testing for sort methods */
-        handHand.sortAscending();
-        System.out.println("\nAscending Order:\n" + handHand.toString());
-
-        handHand.sortDescending();
-        System.out.println("Descending Order:\n" + handHand.toString());
-
-        // Proof that iterator still iterates through original order
-        System.out.println("Iterating through handHand:");
-        for (Card c : handHand) {
-            System.out.println(c.toString());
-        }
-
-        /* Testing for count methods */
-        System.out.println("\nAmount of ACES in handHand: "
-                + handHand.countRank(Rank.ACE));
-
-        System.out.println("Amount of Spades in handHand: "
-                + handHand.countSuit(Suit.SPADES));
-
-        /* Testing for isOver */
-        System.out.println("\nIs hand value over 21: " + handHand.isOver(21));
-
-        /* Testing for reverseHand */
-        Hand reversedHand = handHand.reverseHand();
-        System.out.println("\nReversed Hand:\n" + reversedHand.toString());
-
-    }
 }

@@ -231,6 +231,7 @@ public class Card implements Serializable, Comparable<Card> {
         }
     }
 
+    // TODO: tidy the testing of card class
     public static void main(String[] args) {
         /* 
             Practice cards for testing, also have the added purpose of
@@ -265,7 +266,7 @@ public class Card implements Serializable, Comparable<Card> {
         System.out.println(myCard1.getSuit());
 
         /* Test for toString method */
-        System.out.println(myCard1.toString());
+        System.out.println(myCard1);
 
         /* Test for sum method */
         System.out.println(sum(myCard1, myCard2));
@@ -292,7 +293,7 @@ public class Card implements Serializable, Comparable<Card> {
         myDeck.sort(compAsc);
 
         for (Card c : myDeck) {
-            System.out.println(c.toString());
+            System.out.println(c);
         }
 
         /* Test for CompareSuit method */
@@ -301,7 +302,7 @@ public class Card implements Serializable, Comparable<Card> {
         myDeck.sort(compSuit);
 
         for (Card c : myDeck) {
-            System.out.println(c.toString());
+            System.out.println(c);
         }
     }
 }

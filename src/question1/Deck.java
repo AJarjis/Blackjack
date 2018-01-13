@@ -204,7 +204,7 @@ public class Deck implements Iterable<Card>, Serializable {
         // Iterator testing to print out new deck
         System.out.println("Constructed myDeck:");
         for (Card c : myDeck) {
-            System.out.println(c.toString());
+            System.out.println(c);
         }
 
         System.out.println("\n");
@@ -214,13 +214,13 @@ public class Deck implements Iterable<Card>, Serializable {
 
         System.out.println("Shuffled myDeck:");
         for (Card c : myDeck) {
-            System.out.println(c.toString());
+            System.out.println(c);
         }
 
         System.out.println("\n");
 
         /* Testing for deal method */
-        System.out.println("Card Dealt: " + myDeck.deal().toString());
+        System.out.println("Card Dealt: " + myDeck.deal());
 
         /* Testing for size method, also proves that deal() removed the card */
         System.out.println("myDeck size: " + myDeck.size());
@@ -240,7 +240,7 @@ public class Deck implements Iterable<Card>, Serializable {
 
         System.out.println("Stored Deck:");
         for (Card c : storedDeck) {
-            System.out.println(c.toString());
+            System.out.println(c);
         }
     }
 
