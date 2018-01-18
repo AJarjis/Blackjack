@@ -12,6 +12,7 @@
 package question2;
 
 import java.util.*;
+import question1.*; 
 
 /**
  * 

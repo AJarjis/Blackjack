@@ -12,6 +12,7 @@
 package question2;
 
 import java.util.List;
+import question1.*; 
 
 /**
  *
@@ -70,17 +71,15 @@ public class BasicPlayer implements Player {
     }
 
     /**
-     * Makes a bet for the player, if possible and decreases their balance by
-     * their bet amount
+     * Makes a bet for the player, if possible else return 0
      *
-     * @return the player's bet
+     * @return      the player's bet, 0 if can't make bet
      */
     @Override
     public int makeBet() {
         // Checks if player can make this bet
         if (this.balance >= DEFAULT_BET) {
             bet = DEFAULT_BET;
-            balance -= bet;
         } else {
             bet = 0;
         }
@@ -201,7 +200,7 @@ public class BasicPlayer implements Player {
      */
     @Override
     public boolean isBust() {
-        return this.getHandTotal() > BLACKJACK;
+        return this.playerHand.isOver(BLACKJACK);
     }
 
     /**
