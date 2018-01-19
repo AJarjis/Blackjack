@@ -62,14 +62,15 @@ public class Hand implements Serializable, Iterable<Card> {
      *
      * @serial
      */
-    private int[] totalValues;
+    private ArrayList<Integer> totalValues;
 
     /**
      * Default constructor, creates an empty hand
      */
     public Hand() {
         this.handCards = new ArrayList<>();
-        this.totalValues = new int[5];
+        this.totalValues = new ArrayList<>();
+        this.totalValues.add(0);
 
         // Initialises the hashtable which stores the count for each rank
         rankCount = new HashMap<>();
@@ -122,29 +123,33 @@ public class Hand implements Serializable, Iterable<Card> {
     public void updateTotalValues(Card card, Boolean increaseValue) {
         String rankKey = card.getRank().name();
         String suitKey = card.getSuit().name();
+        int newTotal;
+        int changeVal;
 
         if (increaseValue) {
-            // Increases the rank's count and totalValue[0]
-            rankCount.put(rankKey, rankCount.get(rankKey) + 1);
-            suitCount.put(suitKey, suitCount.get(suitKey) + 1);
-            totalValues[0] += card.getRank().getVALUE();
+            // Increases the rank/suit count and totalValue
+            changeVal = 1;
+            newTotal = totalValues.get(0) + card.getRank().getVALUE();
         } else {
-            // Decreases the rank's count and totalValue[0]
-            rankCount.put(rankKey, rankCount.get(rankKey) - 1);
-            suitCount.put(suitKey, suitCount.get(suitKey) - 1);
-            totalValues[0] -= card.getRank().getVALUE();
+            // Decreases the rank/suit count and totalValue
+            changeVal = -1;
+            newTotal = totalValues.get(0) - card.getRank().getVALUE();
         }
+        
+        // Update rank/suit count
+        rankCount.put(rankKey, rankCount.get(rankKey) + (changeVal));
+        suitCount.put(suitKey, suitCount.get(suitKey) + (changeVal));
+        
+        // Reset total values for new value
+        totalValues.clear();
+        totalValues.add(newTotal);
 
-        int aces = rankCount.get("ACE");
+        int acesFound = rankCount.get("ACE");
 
-        // Loops through the totalValues updating other possible values of hand
-        for (int i = 1; i < (totalValues.length - 1); i++) {
-            // For each ace sets other possible value else default to 0 
-            if (i <= aces) {
-                totalValues[i] = totalValues[i - 1] - 10;
-            } else {
-                totalValues[i] = 0;
-            }
+        // For each ace in hand sets other possible value
+        for (int i = 1; i < acesFound + 1; i++) {
+            int otherVal = totalValues.get(i-1) - 10;
+            totalValues.add(i, otherVal);
         }
     }
 
@@ -153,7 +158,7 @@ public class Hand implements Serializable, Iterable<Card> {
      *
      * @return total values
      */
-    public int[] getTotalValues() {
+    public ArrayList<Integer> getTotalValues() {
         return totalValues;
     }
 
@@ -257,11 +262,7 @@ public class Hand implements Serializable, Iterable<Card> {
      * Sorts a hand into descending order, first by rank then suit
      */
     public void sortDescending() {
-        //TODO: Sort Descending using Card compareTo
-        Comparator descending = new Card.CompareAscending();
-        handCards.sort(descending);
-
-        Collections.reverse(handCards);
+        Collections.sort(handCards);
     }
 
     /**
@@ -314,18 +315,13 @@ public class Hand implements Serializable, Iterable<Card> {
     /**
      * Checks if the lowest possible hand value is greater than a given value
      *
-     * Clarification: This simple code works due to the fact that the amount of
-     * possible values is determined by the amount of aces + 1, totalValues is
-     * also sorted in decreasing order. Therefore totalValues[aces] will always
-     * retrieve the lowest possible hand value.
-     *
      * @param value integer value to compare hand to
      * @return true if value is less than lowest possible hand value, else false
      */
     public boolean isOver(int value) {
-        int aces = rankCount.get("ACE");
+        int lastValue = totalValues.size() - 1;
 
-        return totalValues[aces] > value;
+        return totalValues.get(lastValue) > value;
     }
 
     /**
@@ -393,7 +389,7 @@ public class Hand implements Serializable, Iterable<Card> {
 
         /* Testing for getTotalValue */
         System.out.println("Total Values of Default Hand: "
-                + Arrays.toString(defaultHand.getTotalValues()));
+                + defaultHand.getTotalValues());
 
         /* Testing for iterator */
         handHand.add(myCard3);          // Added card to better display sorting

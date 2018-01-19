@@ -192,7 +192,7 @@ public class Deck implements Iterable<Card>, Serializable {
         while (secondCardIterator.hasNext()) {
             Card c = secondCardIterator.next();
             
-             stream.writeObject(c);
+            stream.writeObject(c);
         }
 
     }
@@ -257,7 +257,7 @@ public class Deck implements Iterable<Card>, Serializable {
             objectOut.writeObject(data);
             objectOut.close();
         } catch (IOException ex) {
-            ex.printStackTrace();   //TODO: error handling for write/read
+            ex.printStackTrace();   //TODO: Error handling for write/read
         }
     }
 

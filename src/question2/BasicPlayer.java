@@ -11,6 +11,7 @@
  ***************************************************************************** */
 package question2;
 
+import java.util.ArrayList;
 import java.util.List;
 import question1.*; 
 
@@ -117,18 +118,13 @@ public class BasicPlayer implements Player {
     public boolean hit() {
         final int CARD_THRESHOLD = 17;  // Limit to where player will stick
 
-        int[] handValues = this.playerHand.getTotalValues();
-        int acesInHand = this.playerHand.countRank(Card.Rank.ACE);
+        ArrayList<Integer> handValues = this.playerHand.getTotalValues();
 
-        // Loops through possible handValues checking if 
-        // value is over 17 but under (or equal to) 21
-        for (int i = 0; i < acesInHand + 1; i++) {
-            if (handValues[i] < BLACKJACK) {
-                if (handValues[i] < CARD_THRESHOLD) {
-                    return true;
-                } else {
-                    return false;
-                }
+        for (Integer val : handValues) {
+            // Jumps to next value if bust
+            if (val < BLACKJACK) {
+                // Hit if threshold not reached
+                return val < CARD_THRESHOLD;    
             }
         }
 
@@ -167,20 +163,17 @@ public class BasicPlayer implements Player {
      */
     @Override
     public int getHandTotal() {
-        int[] handValues = this.playerHand.getTotalValues();
-        int acesInHand = this.playerHand.countRank(Card.Rank.ACE);
+        ArrayList<Integer> handValues = this.playerHand.getTotalValues();
 
-        /*  For any aces in the hand checks for an alternative 
-            value less than 21, initial loop checks for possiblity 
-            of no aces                                           */
-        for (int i = 0; i < acesInHand + 1; i++) {
-            if (handValues[i] <= BLACKJACK) {
-                return handValues[i];
+        // Searches for highest val less than 21
+        for (Integer val : handValues) {
+            if (val <= BLACKJACK) {
+                return val;
             }
         }
 
         // If no value is less than 21 returns the lowest possible value
-        return handValues[acesInHand];
+        return handValues.get(handValues.size() - 1);
     }
 
     /**

@@ -105,8 +105,8 @@ public class Card implements Serializable, Comparable<Card> {
      * Compares two cards by rank and suit
      *
      * @param card card to compare to
-     * @return 0 if cards are equal, positive number if card is greater than the
-     * card passed, negative number if card is less than the card passed
+     * @return 0 if cards are equal, positive number if card is less than the
+     * card passed, negative number if card is greater than the card passed
      */
     @Override
     public int compareTo(Card card) {
@@ -116,11 +116,11 @@ public class Card implements Serializable, Comparable<Card> {
         int card2Rank = card.rank.ordinal();
         int card2Suit = card.suit.ordinal();
 
-        int rankDiff = card1Rank - card2Rank;
+        int rankDiff = card2Rank - card1Rank;
 
         //Compare suit if rank equal
         if (rankDiff == 0) {
-            return card1Suit - card2Suit;
+            return card2Suit - card1Suit;
         }
 
         return rankDiff;
@@ -194,7 +194,20 @@ public class Card implements Serializable, Comparable<Card> {
          */
         @Override
         public int compare(Card card1, Card card2) {
-            return card1.compareTo(card2);
+            int card1Rank = card1.rank.ordinal();
+            int card1Suit = card1.suit.ordinal();
+
+            int card2Rank = card2.rank.ordinal();
+            int card2Suit = card2.suit.ordinal();
+
+            int rankDiff = card1Rank - card2Rank;
+
+            //Compare suit if rank equal
+            if (rankDiff == 0) {
+                return card1Suit - card2Suit;
+            }
+
+            return rankDiff;
         }
     }
 
@@ -231,7 +244,6 @@ public class Card implements Serializable, Comparable<Card> {
         }
     }
 
-    // TODO: tidy the testing of card class
     public static void main(String[] args) {
         /* 
             Practice cards for testing, also have the added purpose of
@@ -246,33 +258,39 @@ public class Card implements Serializable, Comparable<Card> {
         Card myCard2 = new Card(myRank2, mySuit2);
 
         /* Test for suit enums */
+        System.out.println("All Suits: ");
         for (Suit s : Suit.values()) {
             System.out.println(s);
         }
 
         /* Test for rank enums with values */
+        System.out.println("\nAll Ranks: ");
         for (Rank r : Rank.values()) {
             System.out.println(r + "(" + r.getVALUE() + ")");
         }
 
         /* Test for retrieving previous rank */
-        System.out.println(myRank1.getPrevious());
+        System.out.println("\nRank before " + myRank1 + ": " 
+                + myRank1.getPrevious());
 
         /* Test for comparing two cards */
-        System.out.println(myCard1.compareTo(myCard2));
+        System.out.println("\nCompare value between " + myCard1 + " & " 
+                + myCard2 + " is " + myCard1.compareTo(myCard2));
 
         /* Test for accessor methods*/
-        System.out.println(myCard1.getRank());
-        System.out.println(myCard1.getSuit());
+        System.out.println("\nGet rank method: " + myCard1.getRank());
+        System.out.println("Get suit method: " + myCard1.getSuit());
 
         /* Test for toString method */
-        System.out.println(myCard1);
+        System.out.println("\ntoString Method: " + myCard1);
 
         /* Test for sum method */
-        System.out.println(sum(myCard1, myCard2));
+        System.out.println(myCard1 + " + " + myCard2 + " = "
+                + sum(myCard1, myCard2));
 
         /* Test for isBlackjack method */
-        System.out.println(isBlackjack(myCard1, myCard2));
+        System.out.println("isBlackjack method: " + 
+                isBlackjack(myCard1, myCard2));
 
         /* 
             The following generates a deck of cards to allow for better 
@@ -291,7 +309,7 @@ public class Card implements Serializable, Comparable<Card> {
         /* Test for CompareAscending method */
         Comparator compAsc = new CompareAscending();
         myDeck.sort(compAsc);
-
+        System.out.println("\nCompareAscending Sorting: ");
         for (Card c : myDeck) {
             System.out.println(c);
         }
@@ -301,6 +319,7 @@ public class Card implements Serializable, Comparable<Card> {
 
         myDeck.sort(compSuit);
 
+        System.out.println("\nCompareSuit Sorting: ");
         for (Card c : myDeck) {
             System.out.println(c);
         }

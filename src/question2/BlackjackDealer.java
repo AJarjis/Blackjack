@@ -13,7 +13,7 @@ package question2;
 
 import java.util.ArrayList;
 import java.util.List;
-import question1.*; //TODO: replace with actual files
+import question1.*; //TODO: Include card, hand and deck in Q2
 
 /**
  *
