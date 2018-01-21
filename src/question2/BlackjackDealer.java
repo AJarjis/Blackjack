@@ -114,8 +114,6 @@ public class BlackjackDealer implements Dealer {
      */
     @Override
     public int play(Player p) {
-        restockDeck();
-        
         /*  Gives the player a card if they wish to hit and 
             have not exceeded or totalled 21                 */
         while(p.hit() && p.getHandTotal() < BLACKJACK) {
@@ -131,7 +129,24 @@ public class BlackjackDealer implements Dealer {
      */
     @Override
     public int playDealer() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final int CARD_THRESHOLD = 17;  // Limit to where dealer will stick
+        
+        ArrayList<Integer> handValues = this.dealerHand.getTotalValues();
+        
+        // Loops through all possible hand values 
+        for (int i = 0; i < handValues.size(); i++) {
+            Integer val = handValues.get(i);
+            
+            if (val < CARD_THRESHOLD) {     // Dealer hits
+                this.dealerHand.add(this.dealerDeck.deal());
+                i = 0;
+            } else if (val < BLACKJACK){    // Dealer sticks
+                return val;
+            }
+        } 
+        
+        // Returns lowest possible hand value if hand is bust
+        return handValues.get(handValues.size() - 1);
     }
 
     /**
@@ -141,7 +156,17 @@ public class BlackjackDealer implements Dealer {
      */
     @Override
     public int scoreHand(Hand h) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ArrayList<Integer> handValues = h.getTotalValues();
+
+        // Searches for highest val less than 21
+        for (Integer val : handValues) {
+            if (val <= BLACKJACK) {
+                return val;
+            }
+        }
+
+        // If no value is less than 21 returns the lowest possible value
+        return handValues.get(handValues.size() - 1);
     }
 
     /**
@@ -149,7 +174,34 @@ public class BlackjackDealer implements Dealer {
      */
     @Override
     public void settleBets() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int dealerScore = playDealer();  // Dealer plays hand
+        
+        for (Player p : players) {
+            int playerBet = p.getBet();
+            int stake = 0;
+            
+            // Player loses bet 
+            if (p.isBust() || dealerScore == BLACKJACK) {   
+                stake = -playerBet;
+            } else if (p.blackjack()) {  // If player has blackjack wins double
+                stake = playerBet *  2;
+            } else {
+                int playerScore = p.getHandTotal();
+                
+                /*  Player wins/loses bet depending on score, 
+                    tie results in neither a win or loss     */
+                if (playerScore > dealerScore) {        // Player wins
+                    stake = playerBet;
+                } else if (playerScore < dealerScore) { // Player loses
+                    stake = -playerBet;
+                }
+            }
+            
+            // After settling bet, if player has no funds is removed from game
+            if (!p.settleBet(stake)) {
+                this.players.remove(p);
+            }
+        }
     }
 
 }
