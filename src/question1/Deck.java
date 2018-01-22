@@ -36,8 +36,6 @@ public class Deck implements Iterable<Card>, Serializable {
 
     /**
      * Stores a deck of cards
-     *
-     * @serial
      */
     private LinkedList<Card> deckCards;
 
@@ -197,6 +195,11 @@ public class Deck implements Iterable<Card>, Serializable {
 
     }
 
+    /**
+     * Main method for testing methods of the deck class
+     * 
+     * @param args  the command line arguments
+     */
     public static void main(String[] args) {
         /* Testing for constructor */
         Deck myDeck = new Deck();
@@ -257,7 +260,7 @@ public class Deck implements Iterable<Card>, Serializable {
             objectOut.writeObject(data);
             objectOut.close();
         } catch (IOException ex) {
-            ex.printStackTrace();   //TODO: Error handling for write/read
+            ex.printStackTrace();
         }
     }
 

@@ -36,31 +36,23 @@ public class Hand implements Serializable, Iterable<Card> {
 
     /**
      * Stores a player's hand
-     *
-     * @serial
      */
     private ArrayList<Card> handCards;
 
     /**
      * A HashMap which stores the name of each rank as the key, and how many are
      * in the hand as the value
-     *
-     * @serial
      */
     HashMap<String, Integer> rankCount;
 
     /**
      * A HashMap which stores the name of each suit as the key, and how many are
      * in the hand as the value
-     *
-     * @serial
      */
     HashMap<String, Integer> suitCount;
 
     /**
      * Stores all the possible total values a hand can have
-     *
-     * @serial
      */
     private ArrayList<Integer> totalValues;
 
@@ -337,6 +329,11 @@ public class Hand implements Serializable, Iterable<Card> {
         return copy;
     }
 
+    /**
+     * Main method for testing methods of the hand class
+     * 
+     * @param args  the command line arguments
+     */
     public static void main(String[] args) {
 
         /*  Practice cards for testing */

@@ -13,7 +13,7 @@ package question2;
 
 import java.util.ArrayList;
 import java.util.List;
-import question1.*; 
+import question1.*;
 
 /**
  *
@@ -74,7 +74,7 @@ public class BasicPlayer implements Player {
     /**
      * Makes a bet for the player, if possible else return 0
      *
-     * @return      the player's bet, 0 if can't make bet
+     * @return the player's bet, 0 if can't make bet
      */
     @Override
     public int makeBet() {
@@ -124,7 +124,7 @@ public class BasicPlayer implements Player {
             // Jumps to next value if bust
             if (val < BLACKJACK) {
                 // Hit if threshold not reached
-                return val < CARD_THRESHOLD;    
+                return val < CARD_THRESHOLD;
             }
         }
 
@@ -206,16 +206,13 @@ public class BasicPlayer implements Player {
         return this.playerHand;
     }
 
-    // TODO: Think of something for these functions
     /**
      * Shows the player the dealer's card
      *
      * @param c dealer's first card
      */
     @Override
-    public void viewDealerCard(Card c) {
-
-    }
+    public void viewDealerCard(Card c) {}
 
     /**
      * Shows the player all the cards that were played after a hand is finished
@@ -223,15 +220,11 @@ public class BasicPlayer implements Player {
      * @param cards list of cards that were played
      */
     @Override
-    public void viewCards(List<Card> cards) {
-
-    }
+    public void viewCards(List<Card> cards) {}
 
     /**
      * Tells the player that the deck has been reshuffled
      */
     @Override
-    public void newDeck() {
-
-    }
+    public void newDeck() {}
 }

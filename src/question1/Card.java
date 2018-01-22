@@ -78,15 +78,11 @@ public class Card implements Serializable, Comparable<Card> {
 
     /**
      * Stores the rank of a card
-     * 
-     * @serial
      */
     private Rank rank;
     
     /**
      * Stores the suit of a card
-     * 
-     * @serial 
      */
     private Suit suit;
 
@@ -244,6 +240,11 @@ public class Card implements Serializable, Comparable<Card> {
         }
     }
 
+    /**
+     * Main method for testing methods of the card class
+     * 
+     * @param args  the command line arguments
+     */
     public static void main(String[] args) {
         /* 
             Practice cards for testing, also have the added purpose of
