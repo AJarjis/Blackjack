@@ -16,6 +16,6 @@ package question2;
  *
  * @author Ali Jarjis
  */
-public class AdvancedPlayer {
+public class AdvancedPlayer extends BasicPlayer {
 
 }

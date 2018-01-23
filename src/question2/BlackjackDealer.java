@@ -117,10 +117,15 @@ public class BlackjackDealer implements Dealer {
     @Override
     public int play(Player p) {
         restockDeck();
+      
+        // Shows player the dealer's card
+        Card dealersCard = this.dealerHand.getCard(0);
+        p.viewDealerCard(dealersCard);
 
         /*  Gives the player a card if they wish to hit and 
             have not exceeded or totalled 21                 */
         while (p.hit() && p.getHandTotal() < BLACKJACK) {
+            p.viewDealerCard(dealersCard);
             p.takeCard(this.dealerDeck.deal());
         }
 

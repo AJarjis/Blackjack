@@ -1,4 +1,4 @@
-/** ***************************************************************************
+/** ****************************************************************************
  *
  * File        : BasicPlayer.java
  *
@@ -24,27 +24,27 @@ public class BasicPlayer implements Player {
     /**
      * Stores the player's hand
      */
-    private Hand playerHand;
+    protected Hand playerHand;
 
     /**
      * Stores the cash balance the player currently has
      */
-    private int balance;
+    protected int balance;
 
     /**
      * Stores the most recent bet made by the player
      */
-    private int bet;
+    protected int bet;
+
+    /**
+     * Stores the definition of what constitutes as blackjack
+     */
+    protected static final int BLACKJACK = 21;
 
     /**
      * The default bet a basic player will always make
      */
     private static final int DEFAULT_BET = 10;
-
-    /**
-     * Stores the definition of what constitutes as blackjack
-     */
-    private static final int BLACKJACK = 21;
 
     /**
      * Constructor for a BasicPlayer
@@ -212,7 +212,8 @@ public class BasicPlayer implements Player {
      * @param c dealer's first card
      */
     @Override
-    public void viewDealerCard(Card c) {}
+    public void viewDealerCard(Card c) {
+    }
 
     /**
      * Shows the player all the cards that were played after a hand is finished
@@ -220,11 +221,13 @@ public class BasicPlayer implements Player {
      * @param cards list of cards that were played
      */
     @Override
-    public void viewCards(List<Card> cards) {}
+    public void viewCards(List<Card> cards) {
+    }
 
     /**
      * Tells the player that the deck has been reshuffled
      */
     @Override
-    public void newDeck() {}
+    public void newDeck() {
+    }
 }

@@ -229,8 +229,8 @@ public class Hand implements Serializable, Iterable<Card> {
     /**
      * Removes a card at a specific position in the hand and returns the card
      *
-     * @param index
-     * @return
+     * @param index position where to remove card from
+     * @return      removed card
      */
     public Card remove(int index) {
         Card removedCard = this.handCards.get(index);
@@ -327,6 +327,16 @@ public class Hand implements Serializable, Iterable<Card> {
         Collections.reverse(copy.handCards);
 
         return copy;
+    }
+    
+    /**
+     * Retrieves a card from the hand at a given position
+     * 
+     * @param i position of card to get
+     * @return  card at position given
+     */
+    public Card getCard(int i) {
+        return handCards.get(i);
     }
 
     /**
