@@ -16,12 +16,12 @@ import question1.Card.Rank;
 import question1.Card.Suit;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -337,6 +337,15 @@ public class Hand implements Serializable, Iterable<Card> {
      */
     public Card getCard(int i) {
         return handCards.get(i);
+    }
+    
+    /**
+     * Retrieves all cards from the hand
+     * 
+     * @return  a list of cards in the hand
+     */
+    public ArrayList<Card> getAllCards() {
+        return handCards;
     }
 
     /**

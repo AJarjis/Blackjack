@@ -44,7 +44,7 @@ public class BasicPlayer implements Player {
     /**
      * The default bet a basic player will always make
      */
-    private static final int DEFAULT_BET = 10;
+    protected static final int DEFAULT_BET = 10;
 
     /**
      * Constructor for a BasicPlayer
@@ -80,12 +80,12 @@ public class BasicPlayer implements Player {
     public int makeBet() {
         // Checks if player can make this bet
         if (this.balance >= DEFAULT_BET) {
-            bet = DEFAULT_BET;
+            this.bet = DEFAULT_BET;
         } else {
-            bet = 0;
+            this.bet = 0;
         }
 
-        return bet;
+        return this.bet;
     }
 
     /**

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import question1.Card;
 
 /**
  *
@@ -97,7 +98,7 @@ public class BlackjackTable implements Serializable {
             System.out.println("1) Continue Playing");
             System.out.println("2) Load Game");
             System.out.println("3) Save Game");
-            System.out.println("4) Quit");
+            System.out.println("4) Quit to Menu");
 
             int userChoice = userScanner.nextInt();
 
@@ -143,7 +144,7 @@ public class BlackjackTable implements Serializable {
 
         BlackjackTable table = new BlackjackTable(players);
 
-        // User input code
+        // User input code:
         Scanner userScanner = new Scanner(System.in);
         boolean playAgain = false;
         int rounds = 1;
@@ -156,7 +157,7 @@ public class BlackjackTable implements Serializable {
             System.out.println("1) Continue Playing");
             System.out.println("2) Load Game");
             System.out.println("3) Save Game");
-            System.out.println("4) Quit");
+            System.out.println("4) Quit to Menu");
 
             int userChoice = userScanner.nextInt();
 
@@ -194,7 +195,7 @@ public class BlackjackTable implements Serializable {
 
         BlackjackTable table = new BlackjackTable(intermediatePlayers);
 
-        // User input code
+        // User input code:
         Scanner userScanner = new Scanner(System.in);
         boolean playAgain = false;
         int rounds = 1;
@@ -207,7 +208,7 @@ public class BlackjackTable implements Serializable {
             System.out.println("1) Continue Playing");
             System.out.println("2) Load Game");
             System.out.println("3) Save Game");
-            System.out.println("4) Quit");
+            System.out.println("4) Quit to Menu");
 
             int userChoice = userScanner.nextInt();
 
@@ -244,7 +245,7 @@ public class BlackjackTable implements Serializable {
      * Simulates a game of blackjack with advanced players
      */
     public static void advancedGame() {
-
+        // TODO: Simulate an advancedGame
     }
 
     /**
@@ -258,6 +259,8 @@ public class BlackjackTable implements Serializable {
 
         // Loops through a round of blackjack until all rounds are complete
         for (int i = 0; i < rounds; i++) {
+            List<Card> cardsPlayed = new ArrayList<>();
+            
             System.out.println("-----------------------------------------");
             System.out.println("BlackJack!\n");
 
@@ -269,7 +272,8 @@ public class BlackjackTable implements Serializable {
 
                 // Removes players who have no money
                 if (p.settleBet(0)) {
-                    System.out.println("Player: £" + p.getBalance());
+                    System.out.println(p.getClass().getSimpleName() 
+                            + ": £" + p.getBalance());
                 } else {
                     playerIt.remove();
                 }
@@ -306,11 +310,18 @@ public class BlackjackTable implements Serializable {
             for (Player p : table.players) {
                 System.out.println("Player Score: " + table.dealer.play(p));
                 System.out.println(p.getHand().toString());
+                cardsPlayed.addAll(p.getHand().getAllCards());
             }
 
             // Dealer plays hand, displaying outcome
             System.out.println("Dealer's Score: " + table.dealer.playDealer());
             System.out.println(table.dealer.getHand().toString());
+            cardsPlayed.addAll(table.dealer.getHand().getAllCards());
+            
+            // Shows all players the cards played this round
+            for (Player p : table.players) {
+                p.viewCards(cardsPlayed);
+            }
 
             // All bets are settled, preparing the table for the next round
             table.dealer.settleBets();
@@ -320,14 +331,48 @@ public class BlackjackTable implements Serializable {
     }
 
     /**
-     * Main method for testing methods of the blackjackTable class
+     * Main method for testing methods of the blackjackTable class,
+     * testing can be done while running the program
      *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //basicGame();
-        humanGame();
-        //intermediateGame();
+        Scanner userScanner = new Scanner(System.in);
+        boolean playAgain = true;
+
+        do {
+            // User decides what game type they'd like to play or quit
+            System.out.println("\nWelcome to Blackjack!");
+            System.out.println("Please select a game type:");
+            System.out.println("1) Basic Game");
+            System.out.println("2) Human Game");
+            System.out.println("3) Intermediate Game");
+            System.out.println("4) Advanced Game");
+            System.out.println("5) Quit Game");
+
+            int userChoice = userScanner.nextInt();
+
+            switch (userChoice) {
+                case 1:   // Play Basic Game
+                    basicGame();
+                    break;
+                case 2:   // Play Human Game
+                    humanGame();
+                    break;
+                case 3:   // Play Intermediate Game
+                    intermediateGame();
+                    break;
+                case 4:   // Play Advanced Game
+                    advancedGame();
+                    break;
+                case 5:   // Quit Game
+                default:
+                    System.out.println("Thank you for playing!");
+                    playAgain = false;
+                    break;
+            }
+
+        } while (playAgain);
     }
 
 }

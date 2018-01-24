@@ -42,7 +42,7 @@ public class HumanPlayer extends BasicPlayer {
     @Override
     public int makeBet() {
         Scanner userScanner = new Scanner(System.in);
-
+        
         bet = 0;
         
         System.out.println("Your Balance: £" + this.getBalance());
@@ -52,8 +52,14 @@ public class HumanPlayer extends BasicPlayer {
         while (this.balance >= MIN_BET && bet <= 0) {
             System.out.print("How much would you like to bet? £");
 
-            if (userScanner.hasNextInt()) { //TODO: perform check if int
-                bet = userScanner.nextInt();
+            int userBet = userScanner.nextInt();
+            
+            // Checks user has enough money for bet
+            if (userBet <= this.balance) {
+                bet = userBet;
+            } else {
+                System.out.println("You do not have enough money for that "
+                        + "bet! Your balance is £" + this.getBalance());
             }
         };
 

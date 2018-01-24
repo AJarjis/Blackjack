@@ -151,7 +151,7 @@ public class BlackjackDealer implements Dealer {
             if (val < CARD_THRESHOLD) {
                 this.dealerHand.add(this.dealerDeck.deal());
                 i = -1;     // Reset loop to account for new hand values
-                // Sticks if val is not bust, else tries to jump to next val
+            // Sticks if val is not bust, else tries to jump to next val
             } else if (val < BLACKJACK) {
                 return val;
             }
