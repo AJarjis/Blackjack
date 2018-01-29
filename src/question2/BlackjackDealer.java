@@ -13,7 +13,7 @@ package question2;
 
 import java.util.ArrayList;
 import java.util.List;
-import question1.*; //TODO: Include card, hand and deck in Q2
+import question1.*;
 
 /**
  *
@@ -40,6 +40,16 @@ public class BlackjackDealer implements Dealer {
      * Stores the definition of what constitutes as blackjack
      */
     private static final int BLACKJACK = 21;
+    
+    /**
+     * The minimum bet the dealer can accept
+     */
+    private int minBet;
+    
+    /**
+     * The maximum bet the dealer can accept
+     */
+    private int maxBet;
 
     /**
      * Constructs a blackjack dealer with a shuffled deck of cards
@@ -51,7 +61,16 @@ public class BlackjackDealer implements Dealer {
         this.dealerHand = new Hand();
 
         this.players = new ArrayList<>();
-
+    }
+    
+    /**
+     * Constructs a blackjack dealer with rules for the min and max bet
+     */
+    public BlackjackDealer(int minBet, int maxBet) {
+        this();
+        
+        this.minBet = minBet;
+        this.maxBet = maxBet;
     }
 
     /**
@@ -70,7 +89,20 @@ public class BlackjackDealer implements Dealer {
     @Override
     public void takeBets() {
         for (Player p : players) {
-            p.makeBet();
+            boolean illegalBet;
+            
+            // Prevents player from placing bet outside min and max limits
+            do {
+                int betMade = p.makeBet();
+                illegalBet = false;
+                
+                // Asks user to place another bet if not acceptable
+                if (betMade < minBet || betMade > maxBet) {
+                    illegalBet = true;
+                    System.out.println("Please enter a bet between: £" + minBet
+                        + " - £" + maxBet);
+                }
+            } while (illegalBet);
         }
     }
 

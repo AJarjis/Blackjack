@@ -4,10 +4,14 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/AJarj/Git%20Projects/University%20Work/Programming%202/Blackjack/src/question2/IntermediatePlayer.java</file>
+            <file>file:/C:/Users/AJarj/Git%20Projects/University%20Work/Programming%202/Blackjack/src/question2/AdvancedPlayer.java</file>
             <file>file:/C:/Users/AJarj/Git%20Projects/University%20Work/Programming%202/Blackjack/src/question1/Hand.java</file>
+            <file>file:/C:/Users/AJarj/Git%20Projects/University%20Work/Programming%202/Blackjack/src/question1/Card.java</file>
             <file>file:/C:/Users/AJarj/Git%20Projects/University%20Work/Programming%202/Blackjack/src/question2/BlackjackTable.java</file>
             <file>file:/C:/Users/AJarj/Git%20Projects/University%20Work/Programming%202/Blackjack/src/question2/BlackjackDealer.java</file>
             <file>file:/C:/Users/AJarj/Git%20Projects/University%20Work/Programming%202/Blackjack/src/question2/BasicPlayer.java</file>
+            <file>file:/C:/Users/AJarj/Git%20Projects/University%20Work/Programming%202/Blackjack/src/question2/HumanPlayer.java</file>
+            <file>file:/C:/Users/AJarj/Git%20Projects/University%20Work/Programming%202/Blackjack/src/question1/Deck.java</file>
         </group>
     </open-files>
 </project-private>

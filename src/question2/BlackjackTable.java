@@ -11,11 +11,18 @@
  ***************************************************************************** */
 package question2;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import question1.Card;
 
 /**
@@ -37,7 +44,12 @@ public class BlackjackTable implements Serializable {
     /**
      * Players currently playing on this table
      */
-    private List<Player> players;
+    private List<Player> tablePlayers;
+
+    /**
+     * A register of players who originally played at this table
+     */
+    private List<Player> playerRegister;
 
     /**
      * Maximum amount of players allowed at this table
@@ -58,16 +70,41 @@ public class BlackjackTable implements Serializable {
      * Constructs a blackjack table with a dealer
      */
     public BlackjackTable() {
-        this.dealer = new BlackjackDealer();
+        this.dealer = new BlackjackDealer(MIN_BET, MAX_BET);
+        this.tablePlayers = new ArrayList<>();
+        this.playerRegister = new ArrayList<>();
     }
 
     /**
      * Constructs a blackjack table with a dealer and a list of players
+     * 
+     * @param players a list of players playing at this table
      */
     public BlackjackTable(List<Player> players) {
         this();
+        this.tablePlayers = players;
+        this.playerRegister.addAll(players);
+    }
 
-        this.players = players;
+    /**
+     * Brings back all players found in the register to the table, all players
+     * are reconstructed to start with their default values
+     * 
+     * @throws InstantiationException   if player cannot be instantiated
+     * @throws IllegalAccessException   if unable to access player's constructor
+     *                                  method
+     */
+    public void reinstatePlayers() throws InstantiationException, 
+                                            IllegalAccessException {
+        
+        // Loops through register, creating the players as new for the table
+        for (Player p : this.playerRegister) {
+            Class<? extends Player> playerClass = p.getClass();
+            Player playerObject = playerClass.newInstance();
+            
+            this.tablePlayers.add(playerObject);
+        }
+        
     }
 
     /**
@@ -245,7 +282,22 @@ public class BlackjackTable implements Serializable {
      * Simulates a game of blackjack with advanced players
      */
     public static void advancedGame() {
-        // TODO: Simulate an advancedGame
+        // Players for advanced game
+        List<Player> players = new ArrayList<>();
+        Player basicPlayer = new BasicPlayer();
+        Player intermediatePlayer = new IntermediatePlayer();
+        Player advancedPlayer = new AdvancedPlayer();
+        
+        players.add(basicPlayer);
+        players.add(intermediatePlayer);
+        players.add(advancedPlayer);
+
+        BlackjackTable table = new BlackjackTable(players);
+        
+        int rounds = 1000;
+        
+        playGame(1000, table);
+        // TODO: Print average profit/loss per deck
     }
 
     /**
@@ -260,19 +312,19 @@ public class BlackjackTable implements Serializable {
         // Loops through a round of blackjack until all rounds are complete
         for (int i = 0; i < rounds; i++) {
             List<Card> cardsPlayed = new ArrayList<>();
-            
+
             System.out.println("-----------------------------------------");
-            System.out.println("BlackJack!\n");
+            System.out.println("BlackJack Round " + (i + 1) + "\n");
 
             // Displays current players with their current balance
             System.out.println("Current Players:");
-            Iterator<Player> playerIt = table.players.iterator();
+            Iterator<Player> playerIt = table.tablePlayers.iterator();
             while (playerIt.hasNext()) {
                 Player p = playerIt.next();
 
                 // Removes players who have no money
                 if (p.settleBet(0)) {
-                    System.out.println(p.getClass().getSimpleName() 
+                    System.out.println(p.getClass().getSimpleName()
                             + ": £" + p.getBalance());
                 } else {
                     playerIt.remove();
@@ -281,7 +333,7 @@ public class BlackjackTable implements Serializable {
             System.out.println("");
 
             // Gives user the choice of carrying on if all players are gone
-            if (table.players.isEmpty()) {
+            if (table.tablePlayers.isEmpty()) {
                 System.out.println("There are no players left in the game!");
                 System.out.println("Would you like to continue the game "
                         + "with newly created players? (Y/N)");
@@ -291,24 +343,33 @@ public class BlackjackTable implements Serializable {
 
                 // Creates new players or exits game depending on user choice
                 if (emptyPlayersChoice.equals("Y")) {
-                    //table.players = originalPlayers;    // TODO: Create new players
+                    /* Attempts to create new players, on failure alerts user 
+                       and ends current game */
+                    try {
+                        table.reinstatePlayers();
+                    } catch (Exception ex) {
+                        System.out.println("Unable to create new players. "
+                                + "Game has ended!");
+                        return;
+                    }
                 } else {
                     return;
                 }
             }
 
             // Players join the game
-            table.dealer.assignPlayers(table.players);
+            table.dealer.assignPlayers(table.tablePlayers);
 
             // All players make their bets before round begins
-            table.dealer.takeBets();    //TODO: check MAXBET & MINBET when taking bets
+            table.dealer.takeBets();
 
             // Cards are dealt to all players and the dealer
             table.dealer.dealFirstCards();
 
             // Each player plays their hand, displaying outcome
-            for (Player p : table.players) {
-                System.out.println("Player Score: " + table.dealer.play(p));
+            for (Player p : table.tablePlayers) {
+                System.out.println(p.getClass().getSimpleName() + " Score: "
+                        + table.dealer.play(p));
                 System.out.println(p.getHand().toString());
                 cardsPlayed.addAll(p.getHand().getAllCards());
             }
@@ -317,9 +378,9 @@ public class BlackjackTable implements Serializable {
             System.out.println("Dealer's Score: " + table.dealer.playDealer());
             System.out.println(table.dealer.getHand().toString());
             cardsPlayed.addAll(table.dealer.getHand().getAllCards());
-            
+
             // Shows all players the cards played this round
-            for (Player p : table.players) {
+            for (Player p : table.tablePlayers) {
                 p.viewCards(cardsPlayed);
             }
 
@@ -331,8 +392,8 @@ public class BlackjackTable implements Serializable {
     }
 
     /**
-     * Main method for testing methods of the blackjackTable class,
-     * testing can be done while running the program
+     * Main method for testing methods of the blackjackTable class, testing can
+     * be done while running the program
      *
      * @param args the command line arguments
      */
@@ -373,6 +434,45 @@ public class BlackjackTable implements Serializable {
             }
 
         } while (playAgain);
+    }
+
+    /**
+     * Writes data to a file
+     *
+     * @param data data to write
+     * @param filename file where data will be written
+     */
+    public static void writeToFile(Serializable data, String filename) {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(filename);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(data);
+            objectOut.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Reads data from a file
+     *
+     * @param filename name of file to read from
+     * @return the data read from file stored as an object
+     */
+    public static Object readFromFile(String filename) {
+        Object data = null;
+
+        try {
+            FileInputStream fileInput = new FileInputStream(filename);
+            ObjectInputStream objectInput = new ObjectInputStream(fileInput);
+            data = objectInput.readObject();
+            objectInput.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return data;
+
     }
 
 }

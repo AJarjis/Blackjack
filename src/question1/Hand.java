@@ -38,6 +38,12 @@ public class Hand implements Serializable, Iterable<Card> {
      * Stores a player's hand
      */
     private ArrayList<Card> handCards;
+    
+    /**
+     * Stores a duplicate of the player's hand in the original order cards were
+     * added to the hand
+     */
+    private ArrayList<Card> originalHand;
 
     /**
      * A HashMap which stores the name of each rank as the key, and how many are
@@ -61,6 +67,7 @@ public class Hand implements Serializable, Iterable<Card> {
      */
     public Hand() {
         this.handCards = new ArrayList<>();
+        this.originalHand = new ArrayList<>();
         this.totalValues = new ArrayList<>();
         this.totalValues.add(0);
 
@@ -161,6 +168,7 @@ public class Hand implements Serializable, Iterable<Card> {
      */
     public final void add(Card card) {
         this.handCards.add(card);
+        this.originalHand.add(card);
 
         updateTotalValues(card, true);
     }
@@ -195,6 +203,8 @@ public class Hand implements Serializable, Iterable<Card> {
      */
     public boolean remove(Card card) {
         if (this.handCards.remove(card)) {
+            this.originalHand.remove(card);
+            
             updateTotalValues(card, false);
 
             return true;
@@ -238,6 +248,35 @@ public class Hand implements Serializable, Iterable<Card> {
 
         return removedCard;
     }
+    
+    /**
+     * Iterator for traversing the hand in the initial order it was added
+     */
+    private class standardIterator implements Iterator<Card> {
+        private int pos = 0;
+
+        /**
+         * Checks if there is a card after the current card
+         * @return true if card exists, else false
+         */
+        @Override
+        public boolean hasNext() {
+            return pos < originalHand.size();
+        }
+
+        /**
+         * Retrieves the card following this card
+         * @return next card
+         */
+        @Override
+        public Card next() {
+            if (hasNext()) {
+                return originalHand.get(pos++);
+            }
+            return null;
+        }
+        
+    }
 
     /**
      * Iterator allows for traversal of the hand in the order they were added
@@ -246,8 +285,7 @@ public class Hand implements Serializable, Iterable<Card> {
      */
     @Override
     public Iterator<Card> iterator() {
-        //TODO: Make sure iterator still works after sort
-        return handCards.iterator();
+        return new standardIterator();
     }
 
     /**
@@ -356,15 +394,15 @@ public class Hand implements Serializable, Iterable<Card> {
     public static void main(String[] args) {
 
         /*  Practice cards for testing */
-        Rank myRank1 = Rank.ACE;
+        Rank myRank1 = Rank.TWO;
         Suit mySuit1 = Suit.CLUBS;
         Card myCard1 = new Card(myRank1, mySuit1);
 
-        Rank myRank2 = Rank.QUEEN;
+        Rank myRank2 = Rank.FOUR;
         Suit mySuit2 = Suit.SPADES;
         Card myCard2 = new Card(myRank2, mySuit2);
 
-        Rank myRank3 = Rank.TWO;
+        Rank myRank3 = Rank.ACE;
         Suit mySuit3 = Suit.SPADES;
         Card myCard3 = new Card(myRank3, mySuit3);
 

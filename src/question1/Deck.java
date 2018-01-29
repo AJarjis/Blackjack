@@ -132,9 +132,8 @@ public class Deck implements Iterable<Card>, Serializable {
                 position = position + 2;
 
                 return deckCards.get(index);
-            } else {
-                return null;
             }
+            return null;
         }
 
     }
@@ -170,7 +169,7 @@ public class Deck implements Iterable<Card>, Serializable {
     private void readObject(ObjectInputStream stream)
             throws ClassNotFoundException, IOException {
         stream.defaultReadObject();
-        
+
         //deckCards = (LinkedList<Card>) stream.readObject();
     }
 
@@ -186,10 +185,10 @@ public class Deck implements Iterable<Card>, Serializable {
 
         // Saves deck in secondCardIterator order
         Iterator<Card> secondCardIterator = this.secondCardIterator();
-        
+
         while (secondCardIterator.hasNext()) {
             Card c = secondCardIterator.next();
-            
+
             stream.writeObject(c);
         }
 
@@ -197,8 +196,8 @@ public class Deck implements Iterable<Card>, Serializable {
 
     /**
      * Main method for testing methods of the deck class
-     * 
-     * @param args  the command line arguments
+     *
+     * @param args the command line arguments
      */
     public static void main(String[] args) {
         /* Testing for constructor */
