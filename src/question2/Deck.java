@@ -9,10 +9,10 @@
  * Author      : Ali Jarjis
  *
  ***************************************************************************** */
-package question1;
+package question2;
 
-import question1.Card.Rank;
-import question1.Card.Suit;
+import question2.Card.Rank;
+import question2.Card.Suit;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;

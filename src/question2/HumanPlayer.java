@@ -14,7 +14,6 @@ package question2;
 
 import java.util.List;
 import java.util.Scanner;
-import question1.Card;
 
 /**
  *

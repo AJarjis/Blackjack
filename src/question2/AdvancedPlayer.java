@@ -12,7 +12,6 @@
 package question2;
 
 import java.util.List;
-import question1.Card;
 
 /**
  *

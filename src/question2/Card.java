@@ -9,7 +9,7 @@
  * Author      : Ali Jarjis
  *
  ***************************************************************************** */
-package question1;
+package question2;
 
 import java.io.Serializable;
 import java.util.ArrayList;

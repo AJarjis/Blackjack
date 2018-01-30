@@ -13,7 +13,6 @@ Author      : Ali Jarjis
 package question2;
 
 import java.util.ArrayList;
-import question1.Card;
 
 /**
  *
