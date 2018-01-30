@@ -157,20 +157,19 @@ public class Deck implements Iterable<Card>, Serializable {
         return new SecondCardIterator();
     }
 
-    //TODO: Save serializable in SecondCardIterator order
     /**
      * De-serialises the deck of cards
      *
      * @param stream deck to de-serialise
-     * @throws ClassNotFoundException if class of serialised object could not be
-     * found
-     * @throws IOException if an I/O error occurs
+     * @throws ClassNotFoundException   if class of serialised object could
+     *                                  not be found
+     * @throws IOException              if an I/O error occurs
      */
     private void readObject(ObjectInputStream stream)
             throws ClassNotFoundException, IOException {
         stream.defaultReadObject();
 
-        //deckCards = (LinkedList<Card>) stream.readObject();
+        deckCards = (LinkedList<Card>) stream.readObject();
     }
 
     /**
@@ -183,14 +182,16 @@ public class Deck implements Iterable<Card>, Serializable {
             throws IOException {
         stream.defaultWriteObject();
 
-        // Saves deck in secondCardIterator order
+        LinkedList<Card> secondCardDeck = new LinkedList<>();
         Iterator<Card> secondCardIterator = this.secondCardIterator();
-
+        
+        // Adds every second card to the new list to be saved
         while (secondCardIterator.hasNext()) {
             Card c = secondCardIterator.next();
-
-            stream.writeObject(c);
+            secondCardDeck.add(c);
         }
+        
+        stream.writeObject(secondCardDeck);
 
     }
 
@@ -240,7 +241,7 @@ public class Deck implements Iterable<Card>, Serializable {
 
         Deck storedDeck = (Deck) readFromFile(file);
 
-        System.out.println("Stored Deck:");
+        System.out.println("Stored Deck in SecondCardIterator Order:");
         for (Card c : storedDeck) {
             System.out.println(c);
         }

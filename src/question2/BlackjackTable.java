@@ -178,6 +178,7 @@ public class BlackjackTable implements Serializable {
                     break;
                 case 3:   // Save Game
                     saveGame(table);
+                    playAgain = false;
                     break;
                 case 4:   // Quit playing
                 default:
@@ -221,7 +222,7 @@ public class BlackjackTable implements Serializable {
 
         // User input code:
         Scanner userScanner = new Scanner(System.in);
-        boolean playAgain = false;
+        boolean playAgain = true;
         int rounds = 1;
 
         do {
@@ -238,13 +239,13 @@ public class BlackjackTable implements Serializable {
 
             switch (userChoice) {
                 case 1:   // Continue playing
-                    playAgain = true;
                     break;
                 case 2:   // Load game
                     table = loadGame(table);
                     break;
                 case 3:   // Save game
                     saveGame(table);
+                    playAgain = false;
                     break;
                 case 4:   // Quit playing
                 default:
@@ -290,7 +291,6 @@ public class BlackjackTable implements Serializable {
         BlackjackTable table = new BlackjackTable(players);
 
         gameMenu(table);
-        // TODO: Print average profit/loss per deck
     }
 
     /**

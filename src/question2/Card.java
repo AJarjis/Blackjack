@@ -1,4 +1,4 @@
-/** ***************************************************************************
+/******************************************************************************
  *
  * File        : Card.java
  *
@@ -8,13 +8,11 @@
  *
  * Author      : Ali Jarjis
  *
- ***************************************************************************** */
+ ******************************************************************************/
 package question2;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  *
@@ -72,7 +70,7 @@ public class Card implements Serializable, Comparable<Card> {
          * @return Equated value of the rank.
          */
         public int getVALUE() {
-            return VALUE;
+            return this.VALUE;
         }
     };
 
@@ -125,19 +123,19 @@ public class Card implements Serializable, Comparable<Card> {
     /**
      * Retrieves the rank of a card.
      *
-     * @return rank Card rank
+     * @return Card rank
      */
     public Rank getRank() {
-        return rank;
+        return this.rank;
     }
 
     /**
      * Retrieves the suit of a card.
      *
-     * @return suit Card suit
+     * @return Card suit
      */
     public Suit getSuit() {
-        return suit;
+        return this.suit;
     }
 
     /**
@@ -148,7 +146,7 @@ public class Card implements Serializable, Comparable<Card> {
      */
     @Override
     public String toString() {
-        return rank + " OF " + suit;
+        return this.rank + " OF " + this.suit;
     }
 
     /**
@@ -156,7 +154,7 @@ public class Card implements Serializable, Comparable<Card> {
      *
      * @param card1 Card to be added
      * @param card2 Second card to be added
-     * @return Sum value of the two cards
+     * @return      Sum value of the two cards
      */
     public static int sum(Card card1, Card card2) {
         return card1.rank.getVALUE() + card2.rank.getVALUE();
@@ -167,7 +165,7 @@ public class Card implements Serializable, Comparable<Card> {
      *
      * @param card1 Card to be added
      * @param card2 Second card to be added
-     * @return - true if cards equal 21, - false otherwise
+     * @return      true if cards equal 21, false otherwise
      */
     public static boolean isBlackjack(Card card1, Card card2) {
         final int BLACKJACK = 21;
@@ -237,92 +235,6 @@ public class Card implements Serializable, Comparable<Card> {
             }
 
             return suitDiff;
-        }
-    }
-
-    /**
-     * Main method for testing methods of the card class
-     * 
-     * @param args  the command line arguments
-     */
-    public static void main(String[] args) {
-        /* 
-            Practice cards for testing, also have the added purpose of
-            testing the card and enum constructors.
-         */
-        Rank myRank1 = Rank.QUEEN;
-        Suit mySuit1 = Suit.CLUBS;
-        Card myCard1 = new Card(myRank1, mySuit1);
-
-        Rank myRank2 = Rank.QUEEN;
-        Suit mySuit2 = Suit.SPADES;
-        Card myCard2 = new Card(myRank2, mySuit2);
-
-        /* Test for suit enums */
-        System.out.println("All Suits: ");
-        for (Suit s : Suit.values()) {
-            System.out.println(s);
-        }
-
-        /* Test for rank enums with values */
-        System.out.println("\nAll Ranks: ");
-        for (Rank r : Rank.values()) {
-            System.out.println(r + "(" + r.getVALUE() + ")");
-        }
-
-        /* Test for retrieving previous rank */
-        System.out.println("\nRank before " + myRank1 + ": " 
-                + myRank1.getPrevious());
-
-        /* Test for comparing two cards */
-        System.out.println("\nCompare value between " + myCard1 + " & " 
-                + myCard2 + " is " + myCard1.compareTo(myCard2));
-
-        /* Test for accessor methods*/
-        System.out.println("\nGet rank method: " + myCard1.getRank());
-        System.out.println("Get suit method: " + myCard1.getSuit());
-
-        /* Test for toString method */
-        System.out.println("\ntoString Method: " + myCard1);
-
-        /* Test for sum method */
-        System.out.println(myCard1 + " + " + myCard2 + " = "
-                + sum(myCard1, myCard2));
-
-        /* Test for isBlackjack method */
-        System.out.println("isBlackjack method: " + 
-                isBlackjack(myCard1, myCard2));
-
-        /* 
-            The following generates a deck of cards to allow for better 
-            testing of the two comparator classes. 
-         */
-        List<Card> myDeck = new ArrayList<>();
-
-        for (Suit s : Suit.values()) {
-            for (Rank r : Rank.values()) {
-                Card newCard = new Card(r, s);
-
-                myDeck.add(newCard);
-            }
-        }
-
-        /* Test for CompareAscending method */
-        Comparator compAsc = new CompareAscending();
-        myDeck.sort(compAsc);
-        System.out.println("\nCompareAscending Sorting: ");
-        for (Card c : myDeck) {
-            System.out.println(c);
-        }
-
-        /* Test for CompareSuit method */
-        Comparator compSuit = new CompareSuit();
-
-        myDeck.sort(compSuit);
-
-        System.out.println("\nCompareSuit Sorting: ");
-        for (Card c : myDeck) {
-            System.out.println(c);
         }
     }
 }

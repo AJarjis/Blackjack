@@ -13,8 +13,6 @@ package question2;
 
 import question2.Card.Rank;
 import question2.Card.Suit;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -157,20 +155,19 @@ public class Deck implements Iterable<Card>, Serializable {
         return new SecondCardIterator();
     }
 
-    //TODO: Save serializable in SecondCardIterator order
     /**
      * De-serialises the deck of cards
      *
      * @param stream deck to de-serialise
-     * @throws ClassNotFoundException if class of serialised object could not be
-     * found
-     * @throws IOException if an I/O error occurs
+     * @throws ClassNotFoundException   if class of serialised object could
+     *                                  not be found
+     * @throws IOException              if an I/O error occurs
      */
     private void readObject(ObjectInputStream stream)
             throws ClassNotFoundException, IOException {
         stream.defaultReadObject();
 
-        //deckCards = (LinkedList<Card>) stream.readObject();
+        deckCards = (LinkedList<Card>) stream.readObject();
     }
 
     /**
@@ -183,105 +180,16 @@ public class Deck implements Iterable<Card>, Serializable {
             throws IOException {
         stream.defaultWriteObject();
 
-        // Saves deck in secondCardIterator order
+        LinkedList<Card> secondCardDeck = new LinkedList<>();
         Iterator<Card> secondCardIterator = this.secondCardIterator();
-
+        
+        // Adds every second card to the new list to be saved
         while (secondCardIterator.hasNext()) {
             Card c = secondCardIterator.next();
-
-            stream.writeObject(c);
+            secondCardDeck.add(c);
         }
-
-    }
-
-    /**
-     * Main method for testing methods of the deck class
-     *
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        /* Testing for constructor */
-        Deck myDeck = new Deck();
-
-        // Iterator testing to print out new deck
-        System.out.println("Constructed myDeck:");
-        for (Card c : myDeck) {
-            System.out.println(c);
-        }
-
-        System.out.println("\n");
-
-        /* Testing for shuffle method*/
-        myDeck.shuffle();
-
-        System.out.println("Shuffled myDeck:");
-        for (Card c : myDeck) {
-            System.out.println(c);
-        }
-
-        System.out.println("\n");
-
-        /* Testing for deal method */
-        System.out.println("Card Dealt: " + myDeck.deal());
-
-        /* Testing for size method, also proves that deal() removed the card */
-        System.out.println("myDeck size: " + myDeck.size());
-
-        /* Testing for newDeck method */
-        myDeck.newDeck();
-        System.out.println("New myDeck size: " + myDeck.size());
-
-        System.out.println("\n");
-
-        /* Testing for Serializable and SecondCardIterator */
-        String file = "deck.ser";
-
-        writeToFile(myDeck, file);
-
-        Deck storedDeck = (Deck) readFromFile(file);
-
-        System.out.println("Stored Deck:");
-        for (Card c : storedDeck) {
-            System.out.println(c);
-        }
-    }
-
-    /**
-     * Writes data to a file
-     *
-     * @param data data to write
-     * @param filename file where data will be written
-     */
-    public static void writeToFile(Serializable data, String filename) {
-        try {
-            FileOutputStream fileOut = new FileOutputStream(filename);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(data);
-            objectOut.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * Reads data from a file
-     *
-     * @param filename name of file to read from
-     * @return the data read from file stored as an object
-     */
-    public static Object readFromFile(String filename) {
-        Object data = null;
-
-        try {
-            FileInputStream fileInput = new FileInputStream(filename);
-            ObjectInputStream objectInput = new ObjectInputStream(fileInput);
-            data = objectInput.readObject();
-            objectInput.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return data;
+        
+        stream.writeObject(secondCardDeck);
 
     }
 }
