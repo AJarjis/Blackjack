@@ -79,12 +79,12 @@ public class Card implements Serializable, Comparable<Card> {
     /**
      * Stores the rank of a card
      */
-    private Rank rank;
+    private final Rank rank;
     
     /**
      * Stores the suit of a card
      */
-    private Suit suit;
+    private final Suit suit;
 
     /**
      * Constructor for the card class which creates a card with a rank & suit

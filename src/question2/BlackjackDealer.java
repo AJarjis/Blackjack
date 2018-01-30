@@ -11,6 +11,7 @@
  ***************************************************************************** */
 package question2;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import question1.*;
@@ -19,7 +20,12 @@ import question1.*;
  *
  * @author Ali Jarjis
  */
-public class BlackjackDealer implements Dealer {
+public class BlackjackDealer implements Dealer, Serializable {
+
+    /**
+     * Dealer's unique ID for Serialisation
+     */
+    protected static final long serialVersionUID = 115;
 
     /**
      * The deck of cards the dealer uses
@@ -40,12 +46,12 @@ public class BlackjackDealer implements Dealer {
      * Stores the definition of what constitutes as blackjack
      */
     private static final int BLACKJACK = 21;
-    
+
     /**
      * The minimum bet the dealer can accept
      */
     private int minBet;
-    
+
     /**
      * The maximum bet the dealer can accept
      */
@@ -62,13 +68,13 @@ public class BlackjackDealer implements Dealer {
 
         this.players = new ArrayList<>();
     }
-    
+
     /**
      * Constructs a blackjack dealer with rules for the min and max bet
      */
     public BlackjackDealer(int minBet, int maxBet) {
         this();
-        
+
         this.minBet = minBet;
         this.maxBet = maxBet;
     }
@@ -90,17 +96,17 @@ public class BlackjackDealer implements Dealer {
     public void takeBets() {
         for (Player p : players) {
             boolean illegalBet;
-            
+
             // Prevents player from placing bet outside min and max limits
             do {
                 int betMade = p.makeBet();
                 illegalBet = false;
-                
+
                 // Asks user to place another bet if not acceptable
                 if (betMade < minBet || betMade > maxBet) {
                     illegalBet = true;
                     System.out.println("Please enter a bet between: £" + minBet
-                        + " - £" + maxBet);
+                            + " - £" + maxBet);
                 }
             } while (illegalBet);
         }
@@ -149,7 +155,7 @@ public class BlackjackDealer implements Dealer {
     @Override
     public int play(Player p) {
         restockDeck();
-      
+
         // Shows player the dealer's card
         Card dealersCard = this.dealerHand.getCard(0);
         p.viewDealerCard(dealersCard);
@@ -183,7 +189,7 @@ public class BlackjackDealer implements Dealer {
             if (val < CARD_THRESHOLD) {
                 this.dealerHand.add(this.dealerDeck.deal());
                 i = -1;     // Reset loop to account for new hand values
-            // Sticks if val is not bust, else tries to jump to next val
+                // Sticks if val is not bust, else tries to jump to next val
             } else if (val < BLACKJACK) {
                 return val;
             }
@@ -229,24 +235,24 @@ public class BlackjackDealer implements Dealer {
             // If player is bust or dealer has blackjack they lose bet 
             if (p.isBust() || this.blackjack()) {
                 stake = -playerBet;
-            // If player has blackjack wins double
+                // If player has blackjack wins double
             } else if (p.blackjack()) {
                 stake = playerBet * 2;
-            // Finally compares dealer's hand to players
+                // Finally compares dealer's hand to players
             } else {
                 int playerScore = p.getHandTotal();
 
                 // Player wins if higher score or dealer is bust
                 if (playerScore > dealerScore || this.isBust()) {
                     stake = playerBet;
-                // Player loses if lower score
+                    // Player loses if lower score
                 } else if (playerScore < dealerScore) {
                     stake = -playerBet;
                 }
             }
 
             p.newHand();          // Empties the player's hand once completed
-            p.settleBet(stake);   
+            p.settleBet(stake);
         }
 
         Hand.remove(this.dealerHand);

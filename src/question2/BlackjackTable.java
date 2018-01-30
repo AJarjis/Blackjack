@@ -12,6 +12,7 @@
 package question2;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import question1.Card;
 
 /**
@@ -54,17 +53,17 @@ public class BlackjackTable implements Serializable {
     /**
      * Maximum amount of players allowed at this table
      */
-    private final int MAX_PLAYERS = 8;
+    private final static int MAX_PLAYERS = 8;
 
     /**
      * Maximum bet a player can make
      */
-    private final int MAX_BET = 500;
+    private final static int MAX_BET = 500;
 
     /**
      * Minimum bet a player can make
      */
-    private final int MIN_BET = 1;
+    private final static int MIN_BET = 1;
 
     /**
      * Constructs a blackjack table with a dealer
@@ -77,7 +76,7 @@ public class BlackjackTable implements Serializable {
 
     /**
      * Constructs a blackjack table with a dealer and a list of players
-     * 
+     *
      * @param players a list of players playing at this table
      */
     public BlackjackTable(List<Player> players) {
@@ -89,50 +88,73 @@ public class BlackjackTable implements Serializable {
     /**
      * Brings back all players found in the register to the table, all players
      * are reconstructed to start with their default values
-     * 
-     * @throws InstantiationException   if player cannot be instantiated
-     * @throws IllegalAccessException   if unable to access player's constructor
-     *                                  method
+     *
+     * @throws InstantiationException if player cannot be instantiated
+     * @throws IllegalAccessException if unable to access player's constructor
+     * method
      */
-    public void reinstatePlayers() throws InstantiationException, 
-                                            IllegalAccessException {
-        
+    public void reinstatePlayers() throws InstantiationException,
+            IllegalAccessException {
+
         // Loops through register, creating the players as new for the table
         for (Player p : this.playerRegister) {
             Class<? extends Player> playerClass = p.getClass();
             Player playerObject = playerClass.newInstance();
-            
+
             this.tablePlayers.add(playerObject);
         }
-        
+
     }
 
     /**
-     * Simulates a game of blackjack with basic players
+     * Saves a game (table, which includes players and dealer) for future play
+     * @param table     table to save
      */
-    public static void basicGame() {
-        final int AMOUNT_OF_PLAYERS = 4;
+    public static void saveGame(BlackjackTable table) {
+        String file = "recentGameFile.ser";
 
-        // Creates and populates a list of basic players for the table
-        List<Player> basicPlayers = new ArrayList<>();
-        for (int i = 0; i < AMOUNT_OF_PLAYERS; i++) {
-            Player p = new BasicPlayer();
-            basicPlayers.add(p);
+        try {
+            writeToFile(table, file);
+            System.out.println("Game saved!");
+        } catch (IOException ex) {
+            System.out.println("Unable to save game. Please try again.");
         }
+    }
 
-        BlackjackTable table = new BlackjackTable(basicPlayers);
+    /**
+     * Loads a game to play
+     * @param table     original table which is returned in case failed to 
+     *                  load table
+     * @return          loaded table
+     */
+    public static BlackjackTable loadGame(BlackjackTable table) {
+        String file = "recentGameFile.ser";
 
-        // User input code
+        try {
+            table = (BlackjackTable) readFromFile(file);
+            System.out.println("Loaded game!");
+        } catch (ClassNotFoundException | IOException ex) {
+            System.out.println("Unable to load game. Please try again.");
+        }
+        
+        return table;
+    }
+    
+    /**
+     * Displays a menu for the user to decide how many rounds a game to play or
+     * if they wish to save/load a game or even quit entirely
+     * 
+     * @param table     table that will be played at
+     */
+    public static void gameMenu(BlackjackTable table) {
         Scanner userScanner = new Scanner(System.in);
-        boolean playAgain = false;
+        boolean playAgain = true;
         int rounds = 1;
 
         do {
-            playGame(rounds, table);
-
             // User decides whether to continue, load, save or quit game
             System.out.println("What would you like to do?");
-            System.out.println("1) Continue Playing");
+            System.out.println("1) Play Game");
             System.out.println("2) Load Game");
             System.out.println("3) Save Game");
             System.out.println("4) Quit to Menu");
@@ -150,14 +172,13 @@ public class BlackjackTable implements Serializable {
                         }
                     } while (rounds < 0);
 
-                    playAgain = true;
-
+                    playGame(rounds, table);
                     break;
-                case 2:   // TODO: Load game
-
+                case 2:   // Load Game
+                    table = loadGame(table);
                     break;
-                case 3:   // TODO: Save game
-
+                case 3:   // Save Game
+                    saveGame(table);
                     break;
                 case 4:   // Quit playing
                 default:
@@ -166,6 +187,24 @@ public class BlackjackTable implements Serializable {
             }
 
         } while (playAgain);
+    }
+
+    /**
+     * Simulates a game of blackjack with basic players
+     */
+    public static void basicGame() {
+        final int AMOUNT_OF_PLAYERS = 4;
+
+        // Creates and populates a list of basic players for the table
+        List<Player> basicPlayers = new ArrayList<>();
+        for (int i = 0; i < AMOUNT_OF_PLAYERS; i++) {
+            Player p = new BasicPlayer();
+            basicPlayers.add(p);
+        }
+
+        BlackjackTable table = new BlackjackTable(basicPlayers);
+
+        gameMenu(table);
     }
 
     /**
@@ -203,10 +242,10 @@ public class BlackjackTable implements Serializable {
                     playAgain = true;
                     break;
                 case 2:   // Load game
-
+                    table = loadGame(table);
                     break;
                 case 3:   // Save game
-
+                    saveGame(table);
                     break;
                 case 4:   // Quit playing
                 default:
@@ -232,50 +271,7 @@ public class BlackjackTable implements Serializable {
 
         BlackjackTable table = new BlackjackTable(intermediatePlayers);
 
-        // User input code:
-        Scanner userScanner = new Scanner(System.in);
-        boolean playAgain = false;
-        int rounds = 1;
-
-        do {
-            playGame(rounds, table);
-
-            // User decides whether to continue, load, save or quit game
-            System.out.println("What would you like to do?");
-            System.out.println("1) Continue Playing");
-            System.out.println("2) Load Game");
-            System.out.println("3) Save Game");
-            System.out.println("4) Quit to Menu");
-
-            int userChoice = userScanner.nextInt();
-
-            switch (userChoice) {
-                case 1:   // Continue playing
-                    do {
-                        System.out.println("How many rounds would you "
-                                + "like to play?");
-
-                        if (userScanner.hasNextInt()) {
-                            rounds = userScanner.nextInt();
-                        }
-                    } while (rounds < 0);
-
-                    playAgain = true;
-
-                    break;
-                case 2:   // Load game
-
-                    break;
-                case 3:   // Save game
-
-                    break;
-                case 4:   // Quit playing
-                default:
-                    playAgain = false;
-                    break;
-            }
-
-        } while (playAgain);
+        gameMenu(table);
     }
 
     /**
@@ -287,16 +283,14 @@ public class BlackjackTable implements Serializable {
         Player basicPlayer = new BasicPlayer();
         Player intermediatePlayer = new IntermediatePlayer();
         Player advancedPlayer = new AdvancedPlayer();
-        
+
         players.add(basicPlayer);
         players.add(intermediatePlayer);
         players.add(advancedPlayer);
 
         BlackjackTable table = new BlackjackTable(players);
-        
-        int rounds = 1000;
-        
-        playGame(1000, table);
+
+        gameMenu(table);
         // TODO: Print average profit/loss per deck
     }
 
@@ -347,7 +341,8 @@ public class BlackjackTable implements Serializable {
                        and ends current game */
                     try {
                         table.reinstatePlayers();
-                    } catch (Exception ex) {
+                    } catch (IllegalAccessException
+                            | InstantiationException ex) {
                         System.out.println("Unable to create new players. "
                                 + "Game has ended!");
                         return;
@@ -441,16 +436,16 @@ public class BlackjackTable implements Serializable {
      *
      * @param data data to write
      * @param filename file where data will be written
+     *
+     * @throws java.io.FileNotFoundException
      */
-    public static void writeToFile(Serializable data, String filename) {
-        try {
-            FileOutputStream fileOut = new FileOutputStream(filename);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(data);
-            objectOut.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public static void writeToFile(Serializable data, String filename)
+            throws FileNotFoundException, IOException {
+
+        FileOutputStream fileOut = new FileOutputStream(filename);
+        ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+        objectOut.writeObject(data);
+        objectOut.close();
     }
 
     /**
@@ -459,17 +454,13 @@ public class BlackjackTable implements Serializable {
      * @param filename name of file to read from
      * @return the data read from file stored as an object
      */
-    public static Object readFromFile(String filename) {
-        Object data = null;
+    public static Object readFromFile(String filename)
+            throws FileNotFoundException, IOException, ClassNotFoundException {
 
-        try {
-            FileInputStream fileInput = new FileInputStream(filename);
-            ObjectInputStream objectInput = new ObjectInputStream(fileInput);
-            data = objectInput.readObject();
-            objectInput.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        FileInputStream fileInput = new FileInputStream(filename);
+        ObjectInputStream objectInput = new ObjectInputStream(fileInput);
+        Object data = objectInput.readObject();
+        objectInput.close();
 
         return data;
 

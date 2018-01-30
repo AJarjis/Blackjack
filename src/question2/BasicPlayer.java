@@ -11,6 +11,7 @@
  ***************************************************************************** */
 package question2;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import question1.*;
@@ -19,7 +20,12 @@ import question1.*;
  *
  * @author Ali Jarjis
  */
-public class BasicPlayer implements Player {
+public class BasicPlayer implements Player, Serializable {
+
+    /**
+     * Player's unique ID for Serialisation
+     */
+    protected static final long serialVersionUID = 105;
 
     /**
      * Stores the player's hand
